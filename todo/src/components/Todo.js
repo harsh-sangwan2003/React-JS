@@ -38,7 +38,7 @@ export class Todo extends Component {
 
     handleDelete = (id) => {
 
-        let newArr = this.state.tasks.filter(taskObj => taskObj.id != id);
+        let newArr = this.state.tasks.filter(taskObj => taskObj.id !== id);
 
         this.setState({
 
