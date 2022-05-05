@@ -3,7 +3,6 @@ export const movies = {
     results: [
         {
             adult: false,
-            // api link and key is required for full path of the image
             backdrop_path: "/6EdKBYkB1ssgGjc249ud1L55o8d.jpg",
             genre_ids: [28, 878, 53],
             id: 848278,

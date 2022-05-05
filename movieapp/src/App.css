@@ -37,13 +37,13 @@
   }
 }
 
-
+/* Banner */
 .banner-card{
 
-  width: 100vw;
+  position: relative;
   margin-top: 2vh;
   margin-bottom: 3vh;
-  position: relative;
+  width: 98.5vw;
   height: 70vh;
 }
 
@@ -56,10 +56,10 @@
 .banner-title{
 
   position: absolute;
-  top:45vh;
+  top: 45vh;
   left:5vw;
   font-size: 45px;
-  color:white;
+  color: white;
 }
 
 .banner-text{
@@ -67,9 +67,12 @@
   position: absolute;
   top:55vh;
   left:5vw;
+  height: 4.5rem ;
   color:white;
+
 }
 
+/* MovieList */
 .movies-list{
 
   display: flex;
@@ -78,13 +81,11 @@
   justify-content: center;
 }
 
-
 .movie-card{
 
+  position: relative;
   margin: 1rem;
   color:white;
-  width: 20vw;
-  position: relative;
 }
 
 .movie-title{
@@ -94,13 +95,9 @@
   left:1rem;
 }
 
-.movie-button{
+.movies-button{
 
   position: absolute;
-  bottom: 2rem;
-}
+  bottom:2rem;
 
-.movie-button:hover{
-
-  background-color: black ;
 }
