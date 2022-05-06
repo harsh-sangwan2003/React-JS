@@ -103,7 +103,8 @@
 }
 
 /* Favourites */
-.main{
+.genre-selector,
+.favourites-table{
 
   padding:3rem;
 }
