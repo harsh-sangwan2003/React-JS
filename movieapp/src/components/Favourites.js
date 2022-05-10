@@ -1,11 +1,22 @@
-import React, { Component } from 'react'
-import { movies } from '../movieData'
-import axios from 'axios'
-export default class Favourites extends Component {
+import React, { Component } from "react";
 
-    render() {
+import { movies } from "../movieData";
 
-        let movieArr = movies.results;
+export class Favourites extends Component {
+    constructor() {
+        super();
+
+        this.state = {
+            genres: [],
+            currgenre: 'All genres',
+            movies: [],
+            currText: ''
+        };
+    }
+
+    componentDidMount() {
+
+        console.log("Hi");
         let genreids = {
             28: "Action",
             12: "Adventure",
@@ -28,86 +39,181 @@ export default class Favourites extends Component {
             37: "Western",
         };
 
+        let data = JSON.parse(localStorage.getItem('movies-app') || '[]');
+
         let tempArr = [];
 
-        movieArr.map(movieObj => {
+        data.map((movieObj) => {
+            if (!tempArr.includes(genreids[movieObj.genre_ids[0]])) {
+                tempArr.push(genreids[movieObj.genre_ids[0]]);
+            }
+        });
 
-            if (!tempArr.includes(genreids[movieObj.genre_ids[0]]))
-                tempArr.push(genreids[movieObj.genre_ids[0]])
+        tempArr.unshift("All genres");
+
+        this.setState({
+
+            movies: [...data],
+            genres: [...tempArr]
         })
 
-        tempArr.unshift('All genres')
+    }
+
+    handleGenreChange(genre) {
+
+        this.setState({
+
+            currgenre: genre
+        })
+
+    }
+    render() {
+
+        let genreids = {
+            28: "Action",
+            12: "Adventure",
+            16: "Animation",
+            35: "Comedy",
+            80: "Crime",
+            99: "Documentary",
+            18: "Drama",
+            10751: "Family",
+            14: "Fantasy",
+            36: "History",
+            27: "Horror",
+            10402: "Music",
+            9648: "Mystery",
+            10749: "Romance",
+            878: "Sci-Fi",
+            10770: "TV",
+            53: "Thriller",
+            10752: "War",
+            37: "Western",
+        };
+
+        const moviesArr = movies.results;
+        console.log(moviesArr);
+
+        let filterArr = [];
+
+        if (this.state.currText == '') {
+
+            filterArr = this.state.movies;
+        }
+
+        else {
+
+            filterArr = this.state.movies.filter((movieObj) => {
+
+                let currTitle = movieObj.original_title.toLowerCase();
+                return title.inc
+            })
+        }
+        if (this.state.currgenre == 'All genres')
+            filterArr = this.state.movies;
+
+        else {
+
+            filterArr = this.state.movies.filter(movieObj => genreids[movieObj.genre_ids[0]] == this.state.currgenre)
+        }
 
         return (
-
-
-            <div className="main-container">
-
+            <div className="main">
                 <div className="row">
-                    <div className="col-3 movie-genre">
+                    <div className="col-3">
                         <ul className="list-group genre-selector">
-                            {
-                                tempArr.map(genres => (
+                            {this.state.genres.map((genre) => (
+                                this.state.currgenre == genre ?
+                                    <li style={{ background: '#3f51b5', color: 'white', fontWeight: 'bold' }} class="list-group-item">{genre}</li> :
+                                    <li style={{ color: '#3f51b5' }} class="list-group-item" onClick={() => this.handleGenreChange(genre)}>{genre}</li>
 
-                                    <li className='list-group-item'><button className='btn'>{genres}</button></li>
-                                ))
-                            }
+                            ))}
                         </ul>
                     </div>
-
                     <div className="col-9 favourites-table">
-                        <div className='row'>
-                            <input type="text" placeholder='Search' className="input-group-text col" />
+                        <div className="row">
+                            <input
+                                placeholder="Search"
+                                type="text"
+                                className="input-group-text col"
+
+                                onChange={(e) => this.setState({
+
+                                    currText: e.target.value
+                                })}
+                            />
                             <input type="number" className="input-group-text col" />
                         </div>
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Title</th>
-                                    <th scope="col">Genre</th>
-                                    <th scope="col">Popularity</th>
-                                    <th scope="col">Ratings</th>
-                                    <th scope="col">Delete From List</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    movieArr.map(movieEle => (
-
+                        <div className="row">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Genre</th>
+                                        <th scope="col">Popularity</th>
+                                        <th scope="col">Ratings</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filterArr.map((movieElem) => (
                                         <tr>
-                                            <td scope="row">
-                                                <img src={`https://image.tmdb.org/t/p/original${movieEle.backdrop_path}`} style={{ width: '8rem', paddingRight: '1rem' }} alt="Movie Image" />
-                                                {movieEle.title}
+                                            <td>
+                                                <img
+                                                    style={{ width: "6rem" }}
+                                                    src={`https://image.tmdb.org/t/p/original${movieElem.backdrop_path}`}
+                                                />
                                             </td>
-                                            <td>{
-                                                genreids[movieEle.genre_ids[0]]
-                                            }</td>
-                                            <td>{movieEle.popularity}</td>
-                                            <td>{movieEle.vote_average}</td>
-                                            <td><button className='btn btn-danger'>Delete</button></td>
+                                            <th scope="row">{movieElem.title}</th>
+                                            <td>{genreids[movieElem.genre_ids[0]]}</td>
+                                            <td>{movieElem.popularity}</td>
+                                            <td>{movieElem.vote_average}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger">
+                                                    Delete
+                                                </button>
+                                            </td>
                                         </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </table>
-                        <br />
-
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                         <nav aria-label="Page navigation example">
-                            <ul className="pagination">
-                                <li className="page-item"><a className="page-link" href="#">Previous</a></li>
-                                <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                <li className="page-item"><a className="page-link" href="#">Next</a></li>
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        Previous
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        1
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        2
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        3
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        Next
+                                    </a>
+                                </li>
                             </ul>
                         </nav>
-
                     </div>
-
                 </div>
-
             </div>
-        )
+        );
     }
 }
+
+export default Favourites;
