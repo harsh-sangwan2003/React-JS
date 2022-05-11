@@ -109,6 +109,7 @@ export class Favourites extends Component {
                 return title.inc
             })
         }
+
         if (this.state.currgenre == 'All genres')
             filterArr = this.state.movies;
 
