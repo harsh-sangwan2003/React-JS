@@ -8,15 +8,13 @@ export class Favourites extends Component {
 
         this.state = {
             genres: [],
-            currgenre: 'All genres',
+            currgenre: "All genres",
+            currText: '',
             movies: [],
-            currText: ''
         };
     }
 
     componentDidMount() {
-
-        console.log("Hi");
         let genreids = {
             28: "Action",
             12: "Adventure",
@@ -38,11 +36,8 @@ export class Favourites extends Component {
             10752: "War",
             37: "Western",
         };
-
-        let data = JSON.parse(localStorage.getItem('movies-app') || '[]');
-
+        let data = JSON.parse(localStorage.getItem("movies-app") || "[]");
         let tempArr = [];
-
         data.map((movieObj) => {
             if (!tempArr.includes(genreids[movieObj.genre_ids[0]])) {
                 tempArr.push(genreids[movieObj.genre_ids[0]]);
@@ -52,73 +47,63 @@ export class Favourites extends Component {
         tempArr.unshift("All genres");
 
         this.setState({
-
             movies: [...data],
-            genres: [...tempArr]
-        })
-
+            genres: [...tempArr],
+        });
     }
 
-    handleGenreChange(genre) {
-
+    handleGenreChange = (genre) => {
         this.setState({
-
-            currgenre: genre
+            currgenre: genre // action
         })
-
     }
 
-    sortPopularityAsc() {
-
-        let temp = [];
-
-        temp = this.state.movies.sort((A, B) => A.popularity - B.popularity);
+    sortPopularityDesc = () => {
+        let temp = this.state.movies
+        temp.sort(function (objA, objB) {
+            return objB.popularity - objA.popularity
+        })
 
         this.setState({
-
             movies: [...temp]
         })
     }
 
-    sortPopularityDesc() {
-
-        let temp = [];
-
-        temp = this.state.movies.sort((B, A) => A.popularity - B.popularity);
+    sortPopularityAsc = () => {
+        let temp = this.state.movies
+        temp.sort(function (objA, objB) {
+            return objA.popularity - objB.popularity
+        })
 
         this.setState({
-
             movies: [...temp]
         })
     }
 
-    sortRatingUp() {
-
-        let temp = [];
-
-        temp = this.state.movies.sort((B, A) => A.vote_average - B.vote_average);
+    sortRatingDesc = () => {
+        let temp = this.state.movies
+        temp.sort(function (objA, objB) {
+            return objB.vote_average - objA.vote_average
+        })
 
         this.setState({
-
             movies: [...temp]
         })
     }
 
-    sortRatingDown() {
 
-        let temp = [];
-
-        temp = this.state.movies.sort((A, B) => A.vote_average - B.vote_average);
+    sortRatingAsc = () => {
+        let temp = this.state.movies
+        temp.sort(function (objA, objB) {
+            return objA.vote_average - objB.vote_average
+        })
 
         this.setState({
-
             movies: [...temp]
         })
     }
-
 
     render() {
-
         let genreids = {
             28: "Action",
             12: "Adventure",
@@ -141,28 +126,22 @@ export class Favourites extends Component {
             37: "Western",
         };
 
-        const moviesArr = movies.results;
-        console.log(moviesArr);
+        let filterArr = []
 
-        let filterArr = [];
-
-        if (this.state.currText == '') {
-
-            filterArr = this.state.movies;
+        if (this.state.currText === '') {
+            filterArr = this.state.movies
         }
 
         else {
-
             filterArr = this.state.movies.filter((movieObj) => {
-
                 let title = movieObj.original_title.toLowerCase();
-                return title.includes(this.state.currText.toLowerCase());
+                return title.includes(this.state.currText.toLowerCase().trim())
             })
         }
 
-        if (this.state.currgenre != 'All genres') {
 
-            filterArr = this.state.movies.filter(movieObj => genreids[movieObj.genre_ids[0]] == this.state.currgenre)
+        if (this.state.currgenre !== 'All genres') {
+            filterArr = this.state.movies.filter((movieObj) => genreids[movieObj.genre_ids[0]] == this.state.currgenre)
         }
 
         return (
@@ -170,12 +149,24 @@ export class Favourites extends Component {
                 <div className="row">
                     <div className="col-3">
                         <ul className="list-group genre-selector">
-                            {this.state.genres.map((genre) => (
-                                this.state.currgenre == genre ?
-                                    <li style={{ background: '#3f51b5', color: 'white', fontWeight: 'bold' }} class="list-group-item">{genre}</li> :
-                                    <li style={{ color: '#3f51b5' }} class="list-group-item" onClick={() => this.handleGenreChange(genre)}>{genre}</li>
-
-                            ))}
+                            {this.state.genres.map((genre) =>
+                                this.state.currgenre == genre ? (
+                                    <li
+                                        style={{
+                                            background: "#3f51b5",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                        }}
+                                        class="list-group-item"
+                                    >
+                                        {genre}
+                                    </li>
+                                ) : (
+                                    <li style={{ color: "#3f51b5" }} class="list-group-item" onClick={() => this.handleGenreChange(genre)}>
+                                        {genre}
+                                    </li>
+                                )
+                            )}
                         </ul>
                     </div>
                     <div className="col-9 favourites-table">
@@ -184,11 +175,8 @@ export class Favourites extends Component {
                                 placeholder="Search"
                                 type="text"
                                 className="input-group-text col"
-                                value={this.state.currText}
-                                onChange={(e) => this.setState({
+                                value={this.state.currText} onChange={(e) => this.setState({ currText: e.target.value })}
 
-                                    currText: e.target.value
-                                })}
                             />
                             <input type="number" className="input-group-text col" />
                         </div>
@@ -200,12 +188,8 @@ export class Favourites extends Component {
                                         <th></th>
                                         <th scope="col">Title</th>
                                         <th scope="col">Genre</th>
-                                        <th scope="col">
-                                            <i class="fa-solid fa-sort-up" onClick={() => this.sortPopularityDesc()}></i> Popularity
-                                            <i class="fa-solid fa-sort-down" onClick={() => this.sortPopularityAsc()}></i> </th>
-                                        <th scope="col"> <i class="fa-solid fa-sort-up" onClick={() => this.sortRatingDown()}></i> Ratings
-                                            <i class="fa-solid fa-sort-down" onClick={() => this.sortRatingUp()}></i>
-                                        </th>
+                                        <th scope="col"><i class="fa-solid fa-sort-up" onClick={this.sortPopularityDesc}></i>Popularity<i class="fa-solid fa-sort-down" onClick={this.sortPopularityAsc}></i></th>
+                                        <th scope="col"><i class="fa-solid fa-sort-up" onClick={this.sortRatingDesc}></i>Ratings<i class="fa-solid fa-sort-down" onClick={this.sortRatingAsc}></i></th>
                                         <th></th>
                                     </tr>
                                 </thead>
