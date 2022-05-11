@@ -67,6 +67,56 @@ export class Favourites extends Component {
         })
 
     }
+
+    sortPopularityAsc() {
+
+        let temp = [];
+
+        temp = this.state.movies.sort((A, B) => A.popularity - B.popularity);
+
+        this.setState({
+
+            movies: [...temp]
+        })
+    }
+
+    sortPopularityDesc() {
+
+        let temp = [];
+
+        temp = this.state.movies.sort((B, A) => A.popularity - B.popularity);
+
+        this.setState({
+
+            movies: [...temp]
+        })
+    }
+
+    sortRatingUp() {
+
+        let temp = [];
+
+        temp = this.state.movies.sort((B, A) => A.vote_average - B.vote_average);
+
+        this.setState({
+
+            movies: [...temp]
+        })
+    }
+
+    sortRatingDown() {
+
+        let temp = [];
+
+        temp = this.state.movies.sort((A, B) => A.vote_average - B.vote_average);
+
+        this.setState({
+
+            movies: [...temp]
+        })
+    }
+
+
     render() {
 
         let genreids = {
@@ -105,15 +155,12 @@ export class Favourites extends Component {
 
             filterArr = this.state.movies.filter((movieObj) => {
 
-                let currTitle = movieObj.original_title.toLowerCase();
-                return title.inc
+                let title = movieObj.original_title.toLowerCase();
+                return title.includes(this.state.currText.toLowerCase());
             })
         }
 
-        if (this.state.currgenre == 'All genres')
-            filterArr = this.state.movies;
-
-        else {
+        if (this.state.currgenre != 'All genres') {
 
             filterArr = this.state.movies.filter(movieObj => genreids[movieObj.genre_ids[0]] == this.state.currgenre)
         }
@@ -137,7 +184,7 @@ export class Favourites extends Component {
                                 placeholder="Search"
                                 type="text"
                                 className="input-group-text col"
-
+                                value={this.state.currText}
                                 onChange={(e) => this.setState({
 
                                     currText: e.target.value
@@ -153,8 +200,12 @@ export class Favourites extends Component {
                                         <th></th>
                                         <th scope="col">Title</th>
                                         <th scope="col">Genre</th>
-                                        <th scope="col">Popularity</th>
-                                        <th scope="col">Ratings</th>
+                                        <th scope="col">
+                                            <i class="fa-solid fa-sort-up" onClick={() => this.sortPopularityDesc()}></i> Popularity
+                                            <i class="fa-solid fa-sort-down" onClick={() => this.sortPopularityAsc()}></i> </th>
+                                        <th scope="col"> <i class="fa-solid fa-sort-up" onClick={() => this.sortRatingDown()}></i> Ratings
+                                            <i class="fa-solid fa-sort-down" onClick={() => this.sortRatingUp()}></i>
+                                        </th>
                                         <th></th>
                                     </tr>
                                 </thead>
