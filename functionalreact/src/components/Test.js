@@ -8,12 +8,12 @@ export default function Test() {
 
     return (
         <div>
-            {/* {<h1>This is a counter {count}</h1>
+            <h1>This is a counter {count}</h1>
             <button onClick={() => setCount(count + 1)} style={{ marginRight: '1rem' }}>Increment</button>
-            <button onClick={() => setCount(count - 1)}>Decrement</button>} */}
+            <button onClick={() => setCount(count - 1)}>Decrement</button>
 
-            {/* <input type="text" onChange={(e) => setText(e.target.value)} />
-            <h1>{text}</h1> */}
+            <input type="text" onChange={(e) => setText(e.target.value)} />
+            <h1>{text}</h1>
 
         </div>
     )
