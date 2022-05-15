@@ -1,9 +1,9 @@
 import './App.css';
-import Demo from './components/Demo';
+import Ue3 from './components/Ue3';
 
 function App() {
   return (
-    <Demo />
+    <Ue3 />
   );
 }
 
